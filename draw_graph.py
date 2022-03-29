@@ -4,17 +4,6 @@ from jsonpath import jsonpath
 from graphviz import Digraph
 
 
-# path = '/Users/apple/Desktop/OCR'
-
-# path_list = os.listdir(path)
-
-# path_list.remove('crash.log')
-# path_list.remove('tool.log')
-# path_list.sort(key=lambda x:int(x.split('.')[0]))
-
-
-
-
 graph = Digraph(name="Activity Map", format="png",strict=True)
 
 for j in range(1,7):
@@ -37,9 +26,12 @@ for j in range(1,7):
 
     graph.node(act[0])
     for i in range(1,len(act)):
-        cur_act = act[i]
-        graph.node(act[i])
-        graph.edge(act[i-1], act[i])
-
+        if int(act[i].split('.')[0]) < int(act[i+1].split('.')[0]):
+            cur_act = act[i]
+            graph.node(act[i])
+            graph.edge(act[i-1], act[i])
+        else: 
+            print("sort error!!!")
+            
 graph.view()
 
