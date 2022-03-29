@@ -4,8 +4,9 @@ import sys
 from jsonpath import jsonpath 
 from graphviz import Digraph
 
-
-app_name = sys.argv[1]
+app_name = 'ape-accuweather'
+if len(sys.argv) > 1:
+    app_name = sys.argv[1]
 
 graph = Digraph(name="Activity Map", format="png",strict=True)
 
@@ -19,7 +20,7 @@ for j in range(1,7):
         for file in file_list:
             with open(folder_name + file) as f:
                 js = json.loads(f.readline())
-                act += jsonpath(js, "$..act_id") 
+                act += jsonpath(js, "$..act_id")  
 
     except Exception as e:
         print('Error: {}'.format(e))
@@ -28,12 +29,9 @@ for j in range(1,7):
 
     graph.node(act[0])
     for i in range(1,len(act)):
-        if int(act[i].split('.')[0]) < int(act[i+1].split('.')[0]):
-            cur_act = act[i]
-            graph.node(act[i])
-            graph.edge(act[i-1], act[i])
-        else: 
-            print("sort error!!!")
+        cur_act = act[i]
+        graph.node(act[i])
+        graph.edge(act[i-1], act[i])
 
 graph.view()
 
